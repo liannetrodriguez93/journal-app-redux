@@ -3,6 +3,7 @@ import {Link as RouterLink} from 'react-router-dom'
 import {AuthLayout} from "../layout/AuthLayout";
 
 export const RegisterPage = () => {
+
   return (
     <AuthLayout title='Registro'>
       <form action="">
