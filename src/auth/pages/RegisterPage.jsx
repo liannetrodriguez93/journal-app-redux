@@ -1,9 +1,12 @@
-import {Button, Grid, Link, TextField, Typography} from "@mui/material";
+import {Alert, Button, Grid, Link, TextField, Typography} from "@mui/material";
 import {Link as RouterLink} from 'react-router-dom'
 import {AuthLayout} from "../layout/AuthLayout";
 import {useForm} from "react-hook-form";
 import * as Yup from "yup";
 import {yupResolver} from "@hookform/resolvers/yup";
+import {useDispatch, useSelector} from "react-redux";
+import {startCreatingUserWithEmailPassword} from "../../store/auth/index.js";
+import {useMemo} from "react";
 
 const initialValue = {
   displayName: '',
@@ -13,7 +16,7 @@ const initialValue = {
 
 const schema = Yup.object().shape({
   displayName: Yup.string().ensure().required("Field is required"),
-  correo: Yup.string().email('Not a valid email').ensure().required("Field is required"),
+  email: Yup.string().email('Not a valid email').ensure().required("Field is required"),
   password: Yup.string().matches(
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
     "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character"
@@ -21,18 +24,19 @@ const schema = Yup.object().shape({
 });
 
 export const RegisterPage = () => {
+  const dispatch = useDispatch();
+  const {status, errorMessage} = useSelector(state => state.auth);
+
   const {register, handleSubmit, formState: {errors}} = useForm({
     defaultValues: initialValue,
     resolver: yupResolver(schema),
     reValidateMode: 'onChange'
   });
 
-  console.log(errors);
-  console.log(!!errors?.displayName?.message);
+  const isCheckingAuthentication = useMemo(() => status === 'checking', [status]);
 
   const onSubmit = (data) => {
-    console.log(data);
-    console.log(errors);
+    dispatch(startCreatingUserWithEmailPassword(data));
   }
 
   return (
@@ -58,9 +62,9 @@ export const RegisterPage = () => {
               placeholder='correo@google.com'
               fullWidth
               required
-              error={!!errors?.correo?.message}
-              helperText={!!errors?.correo?.message ? errors.correo?.message : null}
-              {...register('correo')}
+              error={!!errors?.email?.message}
+              helperText={!!errors?.email?.message ? errors.email?.message : null}
+              {...register('email')}
             />
           </Grid>
 
@@ -77,14 +81,19 @@ export const RegisterPage = () => {
             />
           </Grid>
           <Grid container spacing={2} sx={{mb: 2, mt: 1}}>
+            <Grid item xs={12} sm={6} display={!!errorMessage ? '' : 'none'}>
+              <Alert severity='error'>{errorMessage}</Alert>
+            </Grid>
+
             <Grid item xs={12} sm={6}>
               <Button
                 variant='contained'
                 fullWidth
                 type='submit'
+                disabled={isCheckingAuthentication}
                 onClick={handleSubmit(onSubmit)}
               >
-                Login
+                Crear cuenta
               </Button>
             </Grid>
           </Grid>
