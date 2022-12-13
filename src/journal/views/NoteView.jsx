@@ -1,5 +1,5 @@
 import {Button, Grid, IconButton, TextField, Typography} from "@mui/material";
-import {SaveOutlined, UploadOutlined} from "@mui/icons-material";
+import {DeleteOutline, SaveOutlined, UploadOutlined} from "@mui/icons-material";
 import {ImageGallery} from "../components";
 import {useDispatch, useSelector} from "react-redux";
 import {useForm} from "../../hooks/index.js";
@@ -41,6 +41,10 @@ export const NoteView = () => {
 
     dispatch(startUploadingFiles(target.files));
 
+  }
+
+  const onDelete = () => {
+    dispatch(startDeletingNote());
   }
 
   return (
@@ -105,6 +109,16 @@ export const NoteView = () => {
           onChange={onInputChange}
           minRows={5}
         />
+      </Grid>
+
+      <Grid container justifyContent='end'>
+        <Button
+          onClick={onDelete}
+          sx={{mt: 2}}
+          color='error'
+        >
+          <DeleteOutline/>
+        </Button>
       </Grid>
 
       <ImageGallery images={activeNote.imageUrls}/>

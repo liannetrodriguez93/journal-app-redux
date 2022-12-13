@@ -5,6 +5,7 @@ import {
   registerUserWithEmailPassword,
   singInWithGoogle
 } from "../../firebase/index.js";
+import {clearNotesLogout} from "../journal/index.js";
 
 export const checkingAuthentication = ({email, password}) => {
   return async (dispatch) => {
@@ -55,6 +56,7 @@ export const startLogout = () => {
   return async (dispatch) => {
     try {
       await logoutFirebase();
+      dispatch(clearNotesLogout())
       dispatch(logout());
     } catch (e) {
       dispatch(logout({errorMessage: 'Some error happen'}));
