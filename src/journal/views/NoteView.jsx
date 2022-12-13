@@ -4,7 +4,7 @@ import {ImageGallery} from "../components";
 import {useDispatch, useSelector} from "react-redux";
 import {useForm} from "../../hooks/index.js";
 import {useEffect, useMemo, useRef} from "react";
-import {setActiveNote, startSaveNote, startUploadingFiles} from "../../store/journal/index.js";
+import {setActiveNote, startDeletingNote, startSaveNote, startUploadingFiles} from "../../store/journal/index.js";
 import Swal from "sweetalert2";
 import 'sweetalert2/dist/sweetalert2.css'
 

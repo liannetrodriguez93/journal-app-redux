@@ -48,8 +48,12 @@ export const journalSlice = createSlice({
       state.messageSaved = '';
       state.notes = [];
       state.activeNote = null
-    }
+    },
+    deleteNoteById: (state, action) => {
+      state.activeNote = null;
+      state.notes = state.notes.filter(note => note.id !== action.payload);
+    },
   }
 })
 
-export const {clearNotesLogout, setPhotosToActiveNote, savingNewNote, addNewEmptyNote, setActiveNote, setNotes, setSaving, updateNote} = journalSlice.actions
+export const {deleteNoteById, clearNotesLogout, setPhotosToActiveNote, savingNewNote, addNewEmptyNote, setActiveNote, setNotes, setSaving, updateNote} = journalSlice.actions
